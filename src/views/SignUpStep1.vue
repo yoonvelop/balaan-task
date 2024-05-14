@@ -30,7 +30,9 @@
         placeholder="비밀번호 재입력"
       />
     </field-wrapper>
-    <button type="submit">다음</button>
+    <base-button type="submit" size="half" @click="handleSubmit">
+      다음
+    </base-button>
   </form>
 </template>
 
@@ -44,10 +46,12 @@ import {
 } from '@/utils/validators';
 import FieldWrapper from '@/components/FieldWrapper.vue';
 import BaseInput from '@/components/Input.vue';
+import BaseButton from '@/components/Button.vue';
 
 export default defineComponent({
   methods: { validatePasswordConfirmation, validatePassword, validateEmail },
   components: {
+    BaseButton,
     FieldWrapper,
     BaseInput,
   },

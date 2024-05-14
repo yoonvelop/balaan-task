@@ -4,7 +4,7 @@ export function validateEmail(value: string): boolean {
 }
 
 // 이름 유효성 검사
-export function validateName(value: string): boolean {
+export function validateUserName(value: string): boolean {
   return /^[가-힣]{2,}$/.test(value) || /^[A-Za-z]{3,}$/.test(value);
 }
 
