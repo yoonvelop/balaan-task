@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import {
   validateEmail,
@@ -47,22 +47,33 @@ import {
 import FieldWrapper from '@/components/FieldWrapper.vue';
 import BaseInput from '@/components/Input.vue';
 import BaseButton from '@/components/Button.vue';
+import { useStore } from 'vuex';
 
 export default defineComponent({
-  methods: { validatePasswordConfirmation, validatePassword, validateEmail },
+  methods: { validateEmail, validatePassword, validatePasswordConfirmation },
   components: {
     BaseButton,
     FieldWrapper,
     BaseInput,
   },
   setup() {
-    const email = ref('');
-    const password = ref('');
+    const store = useStore();
+    const router = useRouter();
+
+    const email = computed({
+      get: () => store.state.userInfo.email,
+      set: (value) => store.commit('setUserInfo', { field: 'email', value }),
+    });
+
+    const password = computed({
+      get: () => store.state.userInfo.password,
+      set: (value) => store.commit('setUserInfo', { field: 'password', value }),
+    });
+
     const confirmPassword = ref('');
     const emailError = ref('');
     const passwordError = ref('');
     const confirmPasswordError = ref('');
-    const router = useRouter();
 
     const handleSubmit = () => {
       let isValid = true;

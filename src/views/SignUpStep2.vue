@@ -24,14 +24,15 @@
       <base-button type="button" size="half" @click="goToPrevPage">
         이전
       </base-button>
-      <base-button type="submit" size="half">다음</base-button>
+      <base-button type="submit" size="half"> 다음 </base-button>
     </div>
   </form>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import { validateUserName, validatePhoneNumber } from '@/utils/validators';
 import FieldWrapper from '@/components/FieldWrapper.vue';
 import BaseInput from '@/components/Input.vue';
@@ -39,10 +40,7 @@ import BaseButton from '@/components/Button.vue';
 import PostCode from '@/components/PostCode.vue';
 
 export default defineComponent({
-  methods: {
-    validatePhoneNumber,
-    validateUserName,
-  },
+  methods: { validatePhoneNumber, validateUserName },
   components: {
     PostCode,
     BaseButton,
@@ -50,30 +48,53 @@ export default defineComponent({
     BaseInput,
   },
   setup() {
-    const userName = ref('');
-    const phoneNumber = ref('');
-    const address = ref('');
-    const detailAddress = ref('');
+    const store = useStore();
+    const router = useRouter();
+
+    const userName = computed({
+      get: () => store.state.userInfo.userName,
+      set: (value) =>
+        store.dispatch('updateUserInfo', { field: 'userName', value }),
+    });
+
+    const phoneNumber = computed({
+      get: () => store.state.userInfo.phoneNumber,
+      set: (value) =>
+        store.dispatch('updateUserInfo', { field: 'phoneNumber', value }),
+    });
+
+    const address = computed({
+      get: () => store.state.userInfo.address,
+      set: (value) =>
+        store.dispatch('updateUserInfo', { field: 'address', value }),
+    });
+
+    const detailAddress = computed({
+      get: () => store.state.userInfo.detailAddress,
+      set: (value) =>
+        store.dispatch('updateUserInfo', { field: 'detailAddress', value }),
+    });
+
     const userNameError = ref('');
     const phoneNumberError = ref('');
     const addressError = ref('');
-    const router = useRouter();
-    const goToPrevPage = (event: MouseEvent) => {
-      event.preventDefault();
-      // TODO: 스토어 구현 후 데이터 가지고 이전 페이지 이동 구현
-      console.log('이전');
-    };
+
     const handleSubmit = () => {
+      if (validateInputs()) {
+        router.push('/signup/step3');
+      }
+    };
+
+    const validateInputs = () => {
       let isValid = true;
       if (!validateUserName(userName.value)) {
-        userNameError.value =
-          '이름은 2글자 이상의 한글 또는 3글자 이상의 알파벳만 가능합니다.';
+        userNameError.value = '유효하지 않은 이름 형식입니다.';
         isValid = false;
       } else {
         userNameError.value = '';
       }
       if (!validatePhoneNumber(phoneNumber.value)) {
-        phoneNumberError.value = '연락처 형식이 유효하지 않습니다.';
+        phoneNumberError.value = '유효하지 않은 전화번호 형식입니다.';
         isValid = false;
       } else {
         phoneNumberError.value = '';
@@ -84,9 +105,11 @@ export default defineComponent({
       } else {
         addressError.value = '';
       }
-      if (isValid) {
-        router.push('/signup/step3');
-      }
+      return isValid;
+    };
+
+    const goToPrevPage = () => {
+      router.go(-1);
     };
 
     return {
@@ -103,6 +126,7 @@ export default defineComponent({
   },
 });
 </script>
+
 <style>
 .button-group {
   display: flex;

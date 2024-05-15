@@ -4,10 +4,10 @@
       <field-wrapper label="카드번호" id="cardNumber" :error="cardError">
         <div class="card-number-inputs">
           <base-input
-            v-for="index in 4"
+            v-for="(number, index) in cardNumbers"
             :key="index"
             type="text"
-            v-model="cardNumbers[index - 1]"
+            v-model="cardNumbers[index]"
             maxlength="4"
             placeholder="XXXX"
             autocomplete="cc-number"
@@ -18,13 +18,15 @@
     <base-button type="submit">완료</base-button>
   </form>
 </template>
+
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import FieldWrapper from '@/components/FieldWrapper.vue';
+import { defineComponent, ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import { validateCardNumber } from '@/utils/validators';
+import FieldWrapper from '@/components/FieldWrapper.vue';
 import BaseInput from '@/components/Input.vue';
 import BaseButton from '@/components/Button.vue';
-import { useRouter } from 'vue-router';
 
 export default defineComponent({
   components: {
@@ -33,23 +35,19 @@ export default defineComponent({
     FieldWrapper,
   },
   setup() {
-    const cardNumbers = ref(['', '', '', '']);
-    const cardError = ref('');
+    const store = useStore();
     const router = useRouter();
+    const cardNumbers = computed({
+      get: () => store.state.userInfo.cardNumbers,
+      set: (value) => store.dispatch('updateCardNumbers', value),
+    });
+    const cardError = ref('');
 
     const handleSubmit = () => {
-      let isValid = true;
       const fullNumber = cardNumbers.value.join('');
-      if (fullNumber.length === 16) {
-        if (!validateCardNumber(fullNumber)) {
-          cardError.value = '유효하지 않은 카드 번호 입니다.';
-          isValid = false;
-        } else {
-          cardError.value = '';
-        }
-      }
-
-      if (isValid) {
+      if (fullNumber.length === 16 && !validateCardNumber(fullNumber)) {
+        cardError.value = '유효하지 않은 카드 번호입니다.';
+      } else {
         router.push('/signup/complete');
       }
     };

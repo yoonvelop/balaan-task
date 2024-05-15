@@ -8,23 +8,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, computed } from 'vue';
+import { useStore } from 'vuex';
 import { openPostcodeModal } from '@/utils/addressSearch';
 import BaseButton from '@/components/Button.vue';
 
 export default defineComponent({
   components: { BaseButton },
   setup(_, { emit }) {
-    const address = ref('');
+    const store = useStore();
 
-    const updateAddress = (newAddress: string) => {
-      address.value = newAddress;
-      emit('update-address', newAddress); // 부모 컴포넌트로 주소 업데이트 이벤트 전송
-    };
+    // 주소 데이터가 스토어에 존재하는 경우 이를 가져와서 입력 필드에 표시
+    const address = computed({
+      get: () => store.state.userInfo.address,
+      set: (value) => {
+        store.dispatch('updateUserInfo', { field: 'address', value });
+        emit('update-address', value);
+      },
+    });
 
     const handleAddressSearch = (event: MouseEvent) => {
       event.preventDefault();
-      openPostcodeModal(updateAddress);
+      openPostcodeModal((newAddress: string) => {
+        address.value = newAddress; // 스토어 업데이트 및 부모 컴포넌트 이벤트 발생
+      });
     };
 
     return {
