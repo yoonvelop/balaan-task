@@ -27,3 +27,23 @@ export function validatePasswordConfirmation(
 ): boolean {
   return password === confirmPassword;
 }
+
+// 카드번호 유효성 검사
+export function validateCardNumber(cardNumber: string): boolean {
+  const digits = cardNumber.split('').map((num) => parseInt(num));
+  let sum = 0;
+
+  for (let i = 0; i < digits.length; i++) {
+    let digit = digits[digits.length - 1 - i]; // 배열의 끝에서부터 시작
+    if (i % 2 === 1) {
+      // 짝수번째 자리 (0-indexed 이므로 1을 더해줌)
+      digit = digit * 2;
+      if (digit > 9) {
+        digit = digit - 9; // 또는 digit = digit % 10 + 1
+      }
+    }
+    sum += digit;
+  }
+
+  return sum % 10 === 0;
+}
