@@ -32,9 +32,9 @@ export default defineComponent({
       }
     });
 
-    function onClick(event: Event) {
+    const onClick = (event: Event) => {
       emit('click', event);
-    }
+    };
 
     return { sizeClass, onClick };
   },
