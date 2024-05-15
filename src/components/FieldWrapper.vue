@@ -44,7 +44,7 @@ label {
 .error-message {
   color: red;
   font-size: 0.8em;
-  margin-top: 5px;
+  margin: 5px 0 0;
   text-align: left;
 }
 </style>

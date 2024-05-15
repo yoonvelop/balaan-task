@@ -30,7 +30,7 @@
         placeholder="비밀번호 재입력"
       />
     </field-wrapper>
-    <base-button type="submit" size="half" @click="handleSubmit">
+    <base-button type="submit" size="full" @click="handleSubmit">
       다음
     </base-button>
   </form>

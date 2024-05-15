@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div class="main-text">
       "{{ userInfo.userName }}"님,<br />
       회원가입이<br />
       완료되었습니다.
@@ -18,12 +18,15 @@ import { useStore } from 'vuex';
 export default defineComponent({
   setup() {
     const store = useStore();
-
     const userInfo = computed(() => store.state.userInfo);
-
     return {
       userInfo,
     };
   },
 });
 </script>
+<style>
+.main-text {
+  font-size: 40px;
+}
+</style>

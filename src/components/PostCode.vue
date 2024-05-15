@@ -1,10 +1,15 @@
 <template>
   <div class="postcode-wrapper">
-    <input type="text" v-model="address" readonly />
-    <base-button type="button" size="half" @click="handleAddressSearch">
-      우편번호 검색
+    <base-button
+      class="postcode-btn"
+      type="button"
+      size="half"
+      @click="handleAddressSearch"
+    >
+      우편번호
     </base-button>
   </div>
+  <input class="address-input" type="text" v-model="address" readonly />
 </template>
 
 <script lang="ts">
@@ -45,5 +50,13 @@ export default defineComponent({
 <style>
 .postcode-wrapper {
   display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+.postcode-btn {
+  margin: 0;
+}
+.address-input {
+  margin-bottom: 10px;
 }
 </style>

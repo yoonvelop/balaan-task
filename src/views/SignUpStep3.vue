@@ -15,7 +15,7 @@
         </div>
       </field-wrapper>
     </div>
-    <base-button type="submit">완료</base-button>
+    <base-button type="submit" size="full">완료</base-button>
   </form>
 </template>
 

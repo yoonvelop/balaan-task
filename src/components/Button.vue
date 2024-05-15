@@ -44,7 +44,7 @@ export default defineComponent({
 <style>
 .btn {
   padding: 10px 20px;
-  margin: 5px;
+  margin: 0;
   background-color: black;
   color: white;
   border: none;

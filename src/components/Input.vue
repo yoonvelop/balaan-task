@@ -52,5 +52,6 @@ export default defineComponent({
 <style>
 input {
   width: 100%;
+  height: 30px;
 }
 </style>

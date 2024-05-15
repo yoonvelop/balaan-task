@@ -15,4 +15,7 @@ export default defineComponent({
   margin: 60px auto;
   text-align: center;
 }
+* {
+  box-sizing: border-box;
+}
 </style>
